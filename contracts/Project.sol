@@ -72,4 +72,24 @@ contract Project {
         bool isCompleted,
         address reciptent
     );
+
+    // @dev Create project
+    // @return null
+
+   constructor(
+       address _creator,
+       uint256 _minimumContribution,
+       uint256 _deadline,
+       uint256 _targetContribution,
+       string memory _projectTitle,
+       string memory _projectDes
+   ) {
+       creator = payable(_creator);
+       minimumContribution = _minimumContribution;
+       deadline = _deadline;
+       targetContribution = _targetContribution;
+       projectTitle = _projectTitle;
+       projectDes = _projectDes;
+       raisedAmount = 0;
+   }
 }
