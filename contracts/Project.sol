@@ -92,4 +92,15 @@ contract Project {
        projectDes = _projectDes;
        raisedAmount = 0;
    }
+
+    function contribute(address _contributor) public validateExpiry(State.Fundraising) payable {
+        require(msg.value >= minimumContribution,'Contribution amount is too low !');
+        if(contributiors[_contributor] == 0){
+            noOfContributers++;
+        }
+        contributiors[_contributor] += msg.value;
+        raisedAmount += msg.value;
+        emit FundingReceived(_contributor,msg.value,raisedAmount);
+        checkFundingCompleteOrExpire();
+    }
 }
