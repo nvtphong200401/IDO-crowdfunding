@@ -6,7 +6,7 @@ contract Project {
         Successful
     },
 
-    
+
     // Structs
 
     struct WithdrawRequest{
@@ -46,4 +46,30 @@ contract Project {
         require(block.timestamp < deadline,'Deadline has passed !');
         _;
     }
+
+
+        // Events
+
+    // Event that will be emitted whenever funding will be received
+    event FundingReceived(address contributor, uint amount, uint currentTotal);
+    // Event that will be emitted whenever withdraw request created
+    event WithdrawRequestCreated(
+        uint256 requestId,
+        string description,
+        uint256 amount,
+        uint256 noOfVotes,
+        bool isCompleted,
+        address reciptent
+    );
+    // Event that will be emitted whenever contributor vote for withdraw request
+    event WithdrawVote(address voter, uint totalVote);
+    // Event that will be emitted whenever contributor vote for withdraw request
+    event AmountWithdrawSuccessful(
+        uint256 requestId,
+        string description,
+        uint256 amount,
+        uint256 noOfVotes,
+        bool isCompleted,
+        address reciptent
+    );
 }
