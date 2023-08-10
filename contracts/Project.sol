@@ -103,4 +103,64 @@ contract Project {
         emit FundingReceived(_contributor,msg.value,raisedAmount);
         checkFundingCompleteOrExpire();
     }
+    function checkFundingCompleteOrExpire() internal {
+        if(raisedAmount >= targetContribution){
+            state = State.Successful; 
+        }else if(block.timestamp > deadline){
+            state = State.Expired; 
+        }
+        completeAt = block.timestamp;
+    }
+
+    function getContractBalance() public view returns(uint256){
+        return address(this).balance;
+    }
+
+    function requestRefund() public validateExpiry(State.Expired) returns(bool) {
+        require(contributiors[msg.sender] > 0,'You dont have any contributed amount !');
+        address payable user = payable(msg.sender);
+        user.transfer(contributiors[msg.sender]);
+        contributiors[msg.sender] = 0;
+        return true;
+    }
+
+    function createWithdrawRequest(string memory _description,uint256 _amount,address payable _reciptent) public isCreator() validateExpiry(State.Successful) {
+        WithdrawRequest storage newRequest = withdrawRequests[numOfWithdrawRequests];
+        numOfWithdrawRequests++;
+
+        newRequest.description = _description;
+        newRequest.amount = _amount;
+        newRequest.noOfVotes = 0;
+        newRequest.isCompleted = false;
+        newRequest.reciptent = _reciptent;
+
+        emit WithdrawRequestCreated(numOfWithdrawRequests,_description, _amount,0,false,_reciptent );
+    }
+
+    function voteWithdrawRequest(uint256 _requestId) public {
+        require(contributiors[msg.sender] > 0,'Only contributor can vote !');
+        WithdrawRequest storage requestDetails = withdrawRequests[_requestId];
+        require(requestDetails.voters[msg.sender] == false,'You already voted !');
+        requestDetails.voters[msg.sender] = true;
+        requestDetails.noOfVotes += 1;
+        emit WithdrawVote(msg.sender,requestDetails.noOfVotes);
+    }
+
+    function withdrawRequestedAmount(uint256 _requestId) isCreator() validateExpiry(State.Successful) public{
+        WithdrawRequest storage requestDetails = withdrawRequests[_requestId];
+        require(requestDetails.isCompleted == false,'Request already completed');
+        require(requestDetails.noOfVotes >= noOfContributers/2,'At least 50% contributor need to vote for this request');
+        requestDetails.reciptent.transfer(requestDetails.amount);
+        requestDetails.isCompleted = true;
+
+        emit AmountWithdrawSuccessful(
+            _requestId,
+            requestDetails.description,
+            requestDetails.amount,
+            requestDetails.noOfVotes,
+            true,
+            requestDetails.reciptent
+        );
+
+    }
 }
