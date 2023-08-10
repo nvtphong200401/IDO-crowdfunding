@@ -163,4 +163,28 @@ contract Project {
         );
 
     }
+
+    function getProjectDetails() public view returns(
+    address payable projectStarter,
+    uint256 minContribution,
+    uint256  projectDeadline,
+    uint256 goalAmount, 
+    uint completedTime,
+    uint256 currentAmount, 
+    string memory title,
+    string memory desc,
+    State currentState,
+    uint256 balance
+    ){
+        projectStarter=creator;
+        minContribution=minimumContribution;
+        projectDeadline=deadline;
+        goalAmount=targetContribution;
+        completedTime=completeAt;
+        currentAmount=raisedAmount;
+        title=projectTitle;
+        desc=projectDes;
+        currentState=state;
+        balance=address(this).balance;
+    }
 }
