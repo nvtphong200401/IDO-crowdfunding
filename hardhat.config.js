@@ -1,10 +1,10 @@
-// require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-waffle");
+// const { ACCOUNT_PRIVATE_KEY,ALCHEMY_KEY } = process.env;
 
-/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.19",
+  solidity: "0.8.4",
+  // defaultNetwork: "rinkeby",
   paths: {
     artifacts: "./client/artifacts",
   },

@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "moment": "^2.29.2",
     "next": "11.1.2",
     "next-redux-wrapper": "^7.0.5",
