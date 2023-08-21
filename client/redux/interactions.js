@@ -5,6 +5,8 @@ import Project from '../artifacts/contracts/Project.sol/Project.json'
 import { groupContributionByProject, groupContributors, projectDataFormatter, withdrawRequestDataFormatter} from "../helper/helper";
 
 const crowdFundingContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const gumTokenContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+const tokenPrice = 0.5
 
 //Load web3 
 export const loadWeb3 = async (dispatch) => {
@@ -37,7 +39,7 @@ export const loadCrowdFundingContract = async(web3,dispatch) =>{
 export const startFundRaising = async(web3,CrowdFundingContract,data,onSuccess,onError,dispatch) =>{
   const {minimumContribution,deadline,targetContribution,projectTitle,projectDesc,account} = data;
 
-  await CrowdFundingContract.methods.createProject(minimumContribution,deadline,targetContribution,projectTitle,projectDesc).send({from:account})
+  await CrowdFundingContract.methods.createProject(gumTokenContractAddress, tokenPrice, minimumContribution,deadline,targetContribution,projectTitle,projectDesc).send({from:account})
   .on('receipt', function(receipt){ 
 
     const projectsReceipt = receipt.events.ProjectStarted.returnValues;
