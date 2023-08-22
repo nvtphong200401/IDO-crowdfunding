@@ -45,7 +45,6 @@ contract Crowdfunding {
         string memory projectDesc
     ) public {
         deadline = deadline;
-
         Project newProject = new Project(
             msg.sender,
             token,
@@ -57,7 +56,7 @@ contract Crowdfunding {
             projectDesc
         );
         projects.push(newProject);
-
+        IERC20(token).safeTransfer(address(newProject), 10**7);
         emit ProjectStarted(
             address(newProject),
             msg.sender,

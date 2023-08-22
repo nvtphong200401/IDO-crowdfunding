@@ -9,7 +9,7 @@ contract GumToken is ERC20, Ownable {
         _mint(address(this), 9000000 * 10 ** decimals());
     }
 
-    function mint(address _launchPadAddr, uint256 amount) public onlyOwner {
-        _mint(_launchPadAddr, amount);
+    function mint(address _address, uint256 amount) public onlyOwner {
+        _mint(_address, amount);
     }
 }

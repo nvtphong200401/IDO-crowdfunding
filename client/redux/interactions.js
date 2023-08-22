@@ -6,7 +6,7 @@ import { groupContributionByProject, groupContributors, projectDataFormatter, wi
 
 const crowdFundingContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 const gumTokenContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
-const tokenPrice = 0.5
+const tokenPrice = 10**15
 
 //Load web3 
 export const loadWeb3 = async (dispatch) => {

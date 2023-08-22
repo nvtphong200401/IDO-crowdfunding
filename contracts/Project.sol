@@ -132,19 +132,15 @@ contract Project {
         require(investmentAmount <= targetContribution, 
             "Investment Amount exceeds targetContribution"
         );
-        
         // Deduct investment amount from target amount
         targetContribution = targetContribution.sub(investmentAmount);
-
         // Calculate token allocation
-        uint256 tokenAllocation = (investmentAmount / tokenPrice).mul(
-            1e18
-        );
+        uint256 tokenAllocation = (investmentAmount / tokenPrice);
         require(tokenAllocation > 0,
             "Token allocatotion must be greater than zero!"
         );
         // Transfer the allocated tokens to the participant.
-        IERC20(token).safeTransfer(msg.sender, tokenAllocation);
+        IERC20(token).safeTransfer(_contributor, tokenAllocation);
 
         contributiors[_contributor] += msg.value;
         raisedAmount += msg.value;
