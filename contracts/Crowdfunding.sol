@@ -5,9 +5,15 @@ import "hardhat/console.sol";
 import "./Project.sol";
 
 contract Crowdfunding {
+    using SafeERC20 for IERC20;
+
+    using SafeMath for uint256;
+
     event ProjectStarted(
         address projectContractAddress,
         address creator,
+        IERC20 token,
+        uint256 tokenPrice,
         uint256 minContribution,
         uint256 projectDeadline,
         uint256 goalAmount,
@@ -30,6 +36,8 @@ contract Crowdfunding {
     // @return null
 
     function createProject(
+        IERC20 token,
+        uint256 tokenPrice,
         uint256 minimumContribution,
         uint256 deadline,
         uint256 targetContribution,
@@ -37,9 +45,10 @@ contract Crowdfunding {
         string memory projectDesc
     ) public {
         deadline = deadline;
-
         Project newProject = new Project(
             msg.sender,
+            token,
+            tokenPrice,
             minimumContribution,
             deadline,
             targetContribution,
@@ -47,10 +56,12 @@ contract Crowdfunding {
             projectDesc
         );
         projects.push(newProject);
-
+        IERC20(token).safeTransfer(address(newProject), 10**7);
         emit ProjectStarted(
             address(newProject),
             msg.sender,
+            token,
+            tokenPrice,
             minimumContribution,
             deadline,
             targetContribution,

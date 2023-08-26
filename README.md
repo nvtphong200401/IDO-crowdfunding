@@ -1,13 +1,30 @@
-# Sample Hardhat Project
+# Crowdfunding IDO
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Info
 
-Try running some of the following tasks:
+- Nguyễn Văn Tấn Phong - 19127646
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+- Trần Trung Hiếu - 19127641
+
+- Phạm Nguyễn Tường Vy - 19127636
+
+- Lê Minh Đức - 19127369
+
+## How to run
+
+1. Create environment
+`npx hardhat node`
+
+2. Deploy contract and token
+`npx hardhat run scripts/deploy.js --network localhost`
+
+3. Add network localhost to meta mask
+
+
+4. Run frontend
+`cd client`
+`npm run dev`
+
+## Video youtube
+
+https://youtu.be/f6l8-gWx2Nw

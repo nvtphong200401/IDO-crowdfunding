@@ -2,8 +2,15 @@
 pragma solidity ^0.8.19;
 
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract Project {
+    using SafeERC20 for IERC20;
+
+    using SafeMath for uint256;
+    
     // Project state
     enum State {
         Fundraising,
@@ -33,6 +40,9 @@ contract Project {
     string public projectTitle;
     string public projectDes;
     State public state = State.Fundraising;
+
+    IERC20 token;
+    uint256 tokenPrice;
 
     mapping(address => uint) public contributiors;
     mapping(uint256 => WithdrawRequest) public withdrawRequests;
@@ -84,6 +94,8 @@ contract Project {
 
     constructor(
         address _creator,
+        IERC20 _token,
+        uint256 _tokenPrice,
         uint256 _minimumContribution,
         uint256 _deadline,
         uint256 _targetContribution,
@@ -91,6 +103,8 @@ contract Project {
         string memory _projectDes
     ) {
         creator = payable(_creator);
+        token = _token;
+        tokenPrice = _tokenPrice;
         minimumContribution = _minimumContribution;
         deadline = _deadline;
         targetContribution = _targetContribution;
@@ -112,6 +126,22 @@ contract Project {
         if (contributiors[_contributor] == 0) {
             noOfContributers++;
         }
+
+        uint256 investmentAmount = msg.value;
+
+        require(investmentAmount <= targetContribution, 
+            "Investment Amount exceeds targetContribution"
+        );
+        // Deduct investment amount from target amount
+        targetContribution = targetContribution.sub(investmentAmount);
+        // Calculate token allocation
+        uint256 tokenAllocation = (investmentAmount / tokenPrice);
+        require(tokenAllocation > 0,
+            "Token allocatotion must be greater than zero!"
+        );
+        // Transfer the allocated tokens to the participant.
+        IERC20(token).safeTransfer(_contributor, tokenAllocation);
+
         contributiors[_contributor] += msg.value;
         raisedAmount += msg.value;
         emit FundingReceived(_contributor, msg.value, raisedAmount);
