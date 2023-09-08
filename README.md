@@ -28,3 +28,8 @@
 ## Video youtube
 
 https://youtu.be/f6l8-gWx2Nw
+
+## References
+
+https://github.com/carlbarrdahl/atoll-ido
+https://consensys.github.io/smart-contract-best-practices/
